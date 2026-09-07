@@ -1,0 +1,7 @@
+main
+stykkevis
+**/*.o
+**/*.tab.*
+**/lex.yy.*
+vgcore*
+.test
