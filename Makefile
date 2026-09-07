@@ -9,8 +9,8 @@ all: run
 run: compile
 	./$(PROGRAM)
 
-compile: main.c
-	$(CC) -o $(PROGRAM) main.c $(CFLAGS)
+compile: main.c utils.c
+	$(CC) -o $(PROGRAM) utils.c main.c $(CFLAGS)
 
 clean:
 	rm -f *.o $(PROGRAM)
