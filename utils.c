@@ -72,3 +72,69 @@ int slen(const char *str) {
     return len;
 }
 
+int has_char(const char *str, const char c) {
+    if (str == NULL || c == 0)
+        return 1;
+    
+    int i = 0;
+    while (str[i] != '\0') {
+        if (str[i] == c) {
+            return 0;
+        }
+        i++;
+    }
+    return 1;
+}
+
+int verify_input(const double vl, const double vh, const double tr, const double tf, const double p, const char timeunit, const char voltageunit, const char *bseq) {
+    
+    int error_status = 0;
+    char* units = "TGMkmunpf";
+
+    if (vl > vh) {
+        fprintf(stderr, "Parameter error: vl=%g cannot be greater than vh=%g\n", vl, vh);
+        error_status = 1;
+    }
+
+    if (vl == vh) {
+        fprintf(stderr, "Parameter error: vl=%g cannot be equal to vh=%g\n", vl, vh);
+        error_status = 1;
+    }
+
+    if (tr == 0) {
+        fprintf(stderr, "Parameter error: tr=%g cannot be null\n", tr);
+        error_status = 1;
+    }
+    
+    if (tf == 0) {
+        fprintf(stderr, "Parameter error: tf=%g cannot be null\n", tf);
+        error_status = 1;
+    }
+
+    if (p == 0) {
+        fprintf(stderr, "Parameter error: p=%g cannot be null\n", tf);
+        error_status = 1;
+    }
+
+    if (p < (tf+tr)) {
+        fprintf(stderr, "Parameter error: tr and tf cannot fit into one period p. Try to  increase period p.\n");
+        error_status = 1;
+    }
+
+    if (has_char(units, timeunit) != 0 && timeunit != 0) {
+        fprintf(stderr, "Parameter error: invalid timeunit=%c\n", timeunit);
+        error_status = 1;
+    }
+    
+    if (has_char(units, voltageunit) != 0 && voltageunit != 0) {
+        fprintf(stderr, "Parameter error: invalid voltageunit=%c\n", voltageunit);
+        error_status = 1;
+    }
+
+    if (check_sequence(bseq) == 1) {
+        fprintf(stderr, "Parameter error: invalid binary sequence: %s.\n", bseq);
+        error_status = 1;
+    }
+
+    return error_status;
+}

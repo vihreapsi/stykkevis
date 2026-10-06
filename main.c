@@ -5,8 +5,8 @@
 #include "utils.h"
 
 int main(int argc, char **argv) {
-    double vl = 0, vh = 1.2, tr = 18.6, tf = 18.6, p = 1000;
-    char *timeunit = "p", *voltageunit = "";
+    double vl = 0, vh = 1.08, tr = 0.3294, tf = 0.3294, p = 35;
+    char timeunit = 'n', voltageunit = 0;
     char *prefix = "V@ @ 0";
     char *prefixrep = (char*)malloc(slen(prefix)*sizeof(char));
     int pfxc = 0;
@@ -16,20 +16,13 @@ int main(int argc, char **argv) {
     // char binarySeq[] = "01100";
     char binarySeq[] = "01100,00110";
     int i = 0;
+    int input_status = 1;
+    input_status = verify_input(vl, vh, tr, tf, p, timeunit, voltageunit, binarySeq);
 
-
-    if ((vl == vh) || p == 0 || tr == 0 || tf == 0) {
-        fprintf(stderr, "Cannot generate PWL string with those inputs\n");
-    }
-
-    if (binarySeq != NULL) {
-        if (check_sequence(binarySeq) == 1) {
-            fprintf(stderr, "Error: invalid binary sequence: %s\n", binarySeq);
-            return 1;
-        }
+    if (input_status == 0) {
         while (binarySeq[i] != '\0') {
             if (i == 0 || binarySeq[i] == ',') {
-                if (prefix != "") {
+                if (prefix != NULL) {
                     replace_symbol(prefix, prefixrep, pfxc);
                     pfxc = (pfxc + 1) % 26;
                 }
@@ -44,7 +37,7 @@ int main(int argc, char **argv) {
 
             voltage = binarySeq[i] == '0' ? vl : vh;
             edge = binarySeq[i] == '0' ? tf : tr;
-            printf("%g%s %g%s %g%s %g%s ", t + edge, timeunit, voltage, voltageunit, t + p, timeunit, voltage, voltageunit);
+            printf("%g%c %g%c %g%c %g%c ", t + edge, timeunit, voltage, voltageunit, t + p, timeunit, voltage, voltageunit);
             t = t + p;
             i++;
 
