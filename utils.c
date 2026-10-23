@@ -1,15 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stddef.h>
 
 #include "utils.h"
 
 int check_sequence(const char *seq) {
-    if (seq == NULL)
+    if (!seq)
         return 1;
 
+    if (seq[0] == '?')
+        return 2;
+
     if (check_comma(seq) == 1)
-        return 1;
+        return 3;
 
     int i = 0;
     while (seq[i] != '\0') {
@@ -22,7 +24,7 @@ int check_sequence(const char *seq) {
 }
 
 int check_comma(const char *seq) {
-    if (seq == NULL)
+    if (!seq)
         return 1;
 
     if (seq[0] == ',')
@@ -45,8 +47,11 @@ int check_comma(const char *seq) {
 }
 
 int replace_symbol(const char *str, char* strnew, int index) {
-    if (str == NULL)
+    if (!str)
         return 1;
+
+    if (str[0] == '?')
+        return 2;
 
     // printf("%d - %d", slen(strnew), slen(str));
     // if (slen(strnew) < slen(str))
@@ -63,38 +68,40 @@ int replace_symbol(const char *str, char* strnew, int index) {
 }
 
 int slen(const char *str) {
-    if (str == NULL)
+    if (!str)
         return 0;
 
-    int len = 0;
-    while (str[len] != '\0')
-        len++;
-    return len;
+    const char *p = str;
+    while (*p != '\0')
+        ++p;
+    return p-str;
 }
 
 int scmp(const char *str1, const char *str2) {
-    if (slen(str1) != slen(str2))
+    if(!str1 || !str2)
         return 1;
-    
-    int i = 0;
-    while (str1[i] != '\0') {
-        if (str1[i] != str2[i])
-            return 1;
-        i++;
+
+    const unsigned char *ptr1 = (unsigned char*)str1, *ptr2 = (unsigned char*)str2;
+
+    while (*ptr1 && *ptr1 == *ptr2) {
+        ++ptr1;
+        ++ptr2;
     }
-    return 0;
+
+    return *ptr1 != *ptr2;
 }
 
 void scpy(char *dst, const char *src) {
-    int i = 0;
-    while (src[i] != '\0') {
+    if (!src)
+        return;
+
+    for (int i=0 ; i<=slen(src) ; i++) {
         dst[i] = src[i];
-        i++;
     }
 }
 
 int has_char(const char *str, const char c) {
-    if (str == NULL || c == 0)
+    if (!str || c == 0)
         return 1;
     
     int i = 0;
@@ -152,7 +159,12 @@ int verify_input(const double vl, const double vh, const double tr, const double
         error_status = 1;
     }
 
-    if (check_sequence(bseq) == 1) {
+    if (check_sequence(bseq) == 1 || check_sequence(bseq) == 2) {
+        fprintf(stderr, "Parameter error: binary sequence not provided.\n");
+        error_status = 1;
+    }
+
+    if (check_sequence(bseq) == 3) {
         fprintf(stderr, "Parameter error: invalid binary sequence: %s.\n", bseq);
         error_status = 1;
     }
