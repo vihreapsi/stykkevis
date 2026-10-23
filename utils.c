@@ -72,6 +72,27 @@ int slen(const char *str) {
     return len;
 }
 
+int scmp(const char *str1, const char *str2) {
+    if (slen(str1) != slen(str2))
+        return 1;
+    
+    int i = 0;
+    while (str1[i] != '\0') {
+        if (str1[i] != str2[i])
+            return 1;
+        i++;
+    }
+    return 0;
+}
+
+void scpy(char *dst, const char *src) {
+    int i = 0;
+    while (src[i] != '\0') {
+        dst[i] = src[i];
+        i++;
+    }
+}
+
 int has_char(const char *str, const char c) {
     if (str == NULL || c == 0)
         return 1;
