@@ -138,3 +138,24 @@ int verify_input(const double vl, const double vh, const double tr, const double
 
     return error_status;
 }
+
+void printhelp() {
+    printf("Stykkevis generates PWL strings with prefix support from a binary sequence\n");
+    printf("\n");
+    printf("Usage: stykkevis [ARGUMENT VALUE] -bs BINARY_SEQUENCE\n");
+    printf("\tBINARY_SEQUENCE: is the binary sequence to convert to PWL\n");
+    printf("ARGUMENTS:\n");
+    printf("\t-vl: voltage low, default 0\n");
+    printf("\t-vh: voltage high, default 1.2\n");
+    printf("\t-vu: voltage unit, default <null>\n");
+    printf("\t-tf: time of falling edge, default 1\n");
+    printf("\t-tr: time of raising edge, default 1\n");
+    printf("\t-p: period, default 100\n");
+    printf("\t-tu: time unit, default \"n\"\n");
+    printf("\t-bs: (required option) binary sequence\n");
+    printf("\t-h: prints this help\n");
+    printf("\n");
+    printf("Voltage/Time units supported are:\n");
+    printf("T: tera, G: giga, M: mega, k: kilo, m: milli, u: micro, n: nano, p: pico, f: femto\n");
+    printf("\n");
+}
