@@ -15,10 +15,9 @@ provide to the binary these parameters:
 - bs: binary sequence
 
 # Example usage:
-	```stykkevis -bs 01,10 -pf "V@ @ VSS"```
+The command:
+<code>stykkevis -bs 01,10 -pf "V@ @ VSS"</code>
 Will produce:
-    ```
-	VA A VSS PWL( 0 0 1 0 100 0 101 1.2 200 1.2 )
-	VB B VSS PWL( 0 0 1 1.2 100 1.2 101 0 200 0 )
-    ```
+<code>VA A VSS PWL( 0 0 1 0 100 0 101 1.2 200 1.2 )
+      VB B VSS PWL( 0 0 1 1.2 100 1.2 101 0 200 0 )</code>
 
