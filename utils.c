@@ -53,10 +53,6 @@ int replace_symbol(const char *str, char* strnew, int index) {
     if (str[0] == '?')
         return 2;
 
-    // printf("%d - %d", slen(strnew), slen(str));
-    // if (slen(strnew) < slen(str))
-    //     return 2;
-    
     int i = 0;
     int ii = (index % 26) + 65;
     while (str[i] != '\0') {
@@ -145,7 +141,7 @@ int verify_input(const double vl, const double vh, const double tr, const double
     }
 
     if (p < (tf+tr)) {
-        fprintf(stderr, "Parameter error: tr and tf cannot fit into one period p. Try to  increase period p.\n");
+        fprintf(stderr, "Parameter error: tr and tf cannot fit into one period p. Try to increase period p.\n");
         error_status = 1;
     }
 
@@ -185,10 +181,17 @@ void printhelp() {
     printf("\t-tr: time of raising edge, default 1\n");
     printf("\t-p: period, default 100\n");
     printf("\t-tu: time unit, default \"n\"\n");
+    printf("\t-pf: prefix template, include '@' placeholders to loop through alphabet characters\n");
     printf("\t-bs: (required option) binary sequence\n");
     printf("\t-h: prints this help\n");
     printf("\n");
     printf("Voltage/Time units supported are:\n");
-    printf("T: tera, G: giga, M: mega, k: kilo, m: milli, u: micro, n: nano, p: pico, f: femto\n");
+    printf("\tT: tera, G: giga, M: mega, k: kilo, m: milli, u: micro, n: nano, p: pico, f: femto\n");
+    printf("\n");
+    printf("Example usage:\n");
+    printf("\tstykkevis -bs 01,10 -pf \"V@ @ VSS\"\n");
+    printf("Will produce:\n");
+    printf("\tVA A VSS PWL( 0 0 1 0 100 0 101 1.2 200 1.2 )\n");
+    printf("\tVB B VSS PWL( 0 0 1 1.2 100 1.2 101 0 200 0 )\n");
     printf("\n");
 }
