@@ -4,27 +4,34 @@
 
 #include "utils.h"
 
+const char* STYKKEVIS_VERSION = "0.0";
+
 int main(int argc, char **argv) {
+    // default argument values
     double vl = 0, vh = 1.2, tr = 1, tf = 1, p = 100;
     char timeunit = 0, voltageunit = 0;
-    char *prefix = (char*)malloc(sizeof(char)*2); // = "V@ @ 0";
-    char *prefixrep = NULL;
-    int pfxc = 0;
-    double t = 0, voltage = 0, edge = 0;
-    // 01100
-    // 00110
-    // char binarySeq[] = "01100";
+
+    // init
+    char *prefix = (char*)malloc(sizeof(char)*2), *prefixrep = NULL;
     char *binarySeq = (char*)malloc(sizeof(char)*2);
-    int i = 0, input_status = 1;
+    double t = 0, voltage = 0, edge = 0;
+    int i = 0, input_status = 1, pfxc = 0;
 
     binarySeq[0] = '?';
     binarySeq[1] = '\0';
     prefix[0] = '?';
     prefix[1] = '\0';
 
-    if (argc == 2 && scmp(argv[1], "-h") == 0) {
-        printhelp();
-        exit(EXIT_SUCCESS);
+    // * argument parsing
+    if (argc == 2) {
+        if (scmp(argv[1], "-h") == 0) {
+            printhelp();
+            exit(EXIT_SUCCESS);
+        }
+        if (scmp(argv[1], "-v") == 0) {
+            printf("%s\n", STYKKEVIS_VERSION);
+            exit(EXIT_SUCCESS);
+        }
     }
 
     if (argc > 2 && argc % 2 == 0) {
@@ -32,13 +39,6 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    // for (int i=1 ; i<argc ; i++) {
-    //     if (i % 2 == 0 && argv[i][0] == '-') {
-    //         printf("Incorrect argument position\n")
-    //         exit(EXIT_FAILURE);
-    //     }
-    // }
-    //
     for (int i=1 ; i<argc-1 ; i+=2) {
         char *ep = NULL;
         
@@ -91,6 +91,7 @@ int main(int argc, char **argv) {
         }
     }
 
+    // verify supplied values
     input_status = verify_input(vl, vh, tr, tf, p, timeunit, voltageunit, binarySeq);
 
     if (input_status != 0) {
@@ -100,6 +101,7 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
+    // generate strings
     while (binarySeq[i] != '\0') {
         if (i == 0 || binarySeq[i] == ',') {
             if(replace_symbol(prefix, prefixrep, pfxc) == 0) {
@@ -123,7 +125,7 @@ int main(int argc, char **argv) {
         if(binarySeq[i] == ',' || binarySeq[i] == '\0')
             printf(")\n");
     }
-    printf("\nPWL generated successfully\n");
+
     free(prefix);
     free(prefixrep);
     free(binarySeq);
